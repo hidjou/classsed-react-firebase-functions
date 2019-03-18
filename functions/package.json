@@ -9,6 +9,7 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
+    "busboy": "^0.3.0",
     "express": "^4.16.4",
     "firebase": "^5.9.0",
     "firebase-admin": "~7.0.0",
