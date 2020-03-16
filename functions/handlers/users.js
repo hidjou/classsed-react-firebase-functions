@@ -239,11 +239,28 @@ exports.uploadImage = (req, res) => {
         const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${
           config.storageBucket
         }/o/${imageFileName}?alt=media`;
-        return db.doc(`/users/${req.user.handle}`).update({ imageUrl });
-      })
-      .then(() => {
-        return res.json({ message: 'image uploaded successfully' });
-      })
+        db.doc(`/users/${req.user.handle}`).get()
+          .then(doc => {
+              const previousImage = [];
+              previousImage.push({
+                  url: doc.data().imageUrl
+              })
+              doc.ref.update({ imageUrl });
+              return previousImage;
+          })
+          .then(previousImage => {
+            previousImage.forEach(doc => {
+                const photoName = doc.url.split('.')[4].slice(6); // 158941894849
+                const photoExtension = doc.url.split('.')[5].slice(0, doc.url.split('.')[5].indexOf('?'))//png, jpg, jpeg
+                const photo = `${photoName}.${photoExtension}`;
+                if(photo !== 'no-img.png'){
+                    admin.storage().bucket(config.storageBucket).file(photo).delete();
+                }
+                //Delete de previous photo in firebase
+            });
+            return res.json({ message: 'Image updated successfully' });
+        })     
+      })  
       .catch((err) => {
         console.error(err);
         return res.status(500).json({ error: 'something went wrong' });
