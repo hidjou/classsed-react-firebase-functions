@@ -13,8 +13,8 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "firebase": "^5.9.0",
-    "firebase-admin": "~7.0.0",
-    "firebase-functions": "^2.2.0",
+    "firebase-admin": "~11.4.1",
+    "firebase-functions": "^4.1.1",
     "uuidv4": "^6.0.7"
   },
   "private": true
